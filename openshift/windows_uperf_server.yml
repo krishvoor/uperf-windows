@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: uperf-server 
+spec:
+  selector:
+    app: uperf-server 
+  ports:
+  - port: 30000
+    targetPort: 30000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uperf-server 
+spec:
+  selector:
+    matchLabels:
+      app: uperf-server
+  template:
+    metadata:
+      labels:
+        app: uperf-server 
+    spec:
+      containers:
+      - name: uperf-server 
+        image: quay.io/krvoora_ocm/windows:uperf
+        command:
+        - powershell.exe
+        - -command
+        - c:/uperf/uperf.exe -s -v -P 30000
+        imagePullPolicy: Always
+        resources:
+        ports:
+        - containerPort: 30000
+      nodeSelector:
+        kubernetes.io/os: windows
+      tolerations:
+      - key: "os"
+        value: "Windows"

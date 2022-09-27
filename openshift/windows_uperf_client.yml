@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: uperf-client-cm
+data:
+  uperf_client.xml: >
+    <?xml version= 1.0?>
+      <profile name="stream-tcp-64-64-1">
+      <group nthreads="1">
+          <transaction iterations="1">
+            <flowop type="connect" options="remotehost=uperf-server.<UPDATE_NAMESPACE>.svc.cluster.local:30000 protocol=tcp port=30001"/>
+          </transaction>
+          <transaction duration="60">
+            <flowop type=write options="count=16 size=64"/>
+          </transaction>
+          <transaction iterations="1">
+            <flowop type=disconnect />
+          </transaction>
+      </group>
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uperf-client 
+spec:
+  selector:
+    matchLabels:
+      app: uperf-client
+  template:
+    metadata:
+      labels:
+        app: uperf-client 
+    spec:
+      containers:
+      - name: uperf-client 
+        image: quay.io/krvoora_ocm/windows:uperf
+        command:
+        - powershell.exe
+        - -command
+        - c:/uperf/uperf.exe -v -a -R -i 1 c:/uper-client/uperf_client.xml -P 30000
+        imagePullPolicy: Always
+        resources:
+        ports:
+        - containerPort: 30000
+      volumeMounts:
+        - name:  uperf-client-cm
+          mountPath:  c:/uperf-client/
+      volumes:
+      - configMap:
+          name: uperf-client-cm
+        name: uperf-client-cm
+      nodeSelector:
+        kubernetes.io/os: windows
+      tolerations:
+      - key: "os"
+        value: "Windows"
