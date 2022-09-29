@@ -33,23 +33,21 @@ spec:
         app: uperf-client 
     spec:
       containers:
-      - name: uperf-client 
+      - name: uperf-client
         image: quay.io/krvoora_ocm/windows:uperf
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: config-volume
+          mountPath: c:\uperf\uperf
         command:
         - powershell.exe
         - -command
-        - c:/uperf/uperf.exe -v -a -R -i 1 c:/uper-client/uperf_client.xml -P 30000
-        imagePullPolicy: Always
-        resources:
-        ports:
-        - containerPort: 30000
-      volumeMounts:
-        - name:  uperf-client-cm
-          mountPath:  c:/uperf-client/
+        - c:\uperf\uperf.exe -v -a -R -i 1 -m c:\uperf\uperf\uperf_client.xml -P 30000
       volumes:
-      - configMap:
+      - name: config-volume
+        configMap:
           name: uperf-client-cm
-        name: uperf-client-cm
+        resources:
       nodeSelector:
         kubernetes.io/os: windows
       tolerations:
