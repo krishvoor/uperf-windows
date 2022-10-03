@@ -8,7 +8,7 @@ data:
       <profile name="stream-tcp-64-64-1">
       <group nthreads="1">
           <transaction iterations="1">
-            <flowop type="connect" options="remotehost=uperf-server.<UPDATE_NAMESPACE>.svc.cluster.local:30000 protocol=tcp port=30001"/>
+            <flowop type="connect" options="remotehost=10.132.2.24:30000 protocol=tcp port=30001"/>
           </transaction>
           <transaction duration="60">
             <flowop type=write options="count=16 size=64"/>
