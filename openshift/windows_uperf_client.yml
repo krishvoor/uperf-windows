@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: uperf-client-cm
 data:
-  uperf_client.xml: >
+  uperf.xml: >
     <?xml version= 1.0?>
       <profile name="stream-tcp-64-64-1">
       <group nthreads="1">
@@ -42,7 +42,7 @@ spec:
         command:
         - powershell.exe
         - -command
-        - c:\uperf\uperf.exe -v -a -R -i 1 -m c:\uperf\uperf\uperf_client.xml -P 30000
+        - c:\uperf\uperf.exe -v -a -R -i 1 -m c:\uperf\uperf\uperf.xml -P 30000
       volumes:
       - name: config-volume
         configMap:

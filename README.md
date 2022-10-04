@@ -5,23 +5,21 @@ The base container image used is `mcr.microsoft.com/windows/servercore:ltsc2019`
 To understand more about the base images:-
 https://learn.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/container-base-images#choosing-a-base-image
 
-### How to install & configure Docker Desktop
+### How to install & configure Docker with a corresponding runtime
 
-To install Docker-Desktop
-https://docs.docker.com/desktop/install/windows-install/ 
+To run Windows container, we can choose from:
+1. [Containerd Runtime](https://github.com/microsoft/Windows-Containers/tree/Main/helpful_tools/Install-ContainerdRuntime)
+2. [DockerCE](https://github.com/microsoft/Windows-Containers/tree/Main/helpful_tools/Install-DockerCE#examples)
+3. [MirantisContainer Runtime](https://github.com/microsoft/Windows-Containers/tree/Main/helpful_tools/Install-MirantisContainerRuntime)
 
-In order to run Windows container, the default configuration of Docker Desktop has to be meddled with
-
-1. Enable Experimental Features in your Docker Desktop configuration, restart it
-2. Switch to Windows-container mode from by right-clicking Docker Desktop from the system-tray
-https://learn.microsoft.com/en-us/virtualization/windowscontainers/quick-start/set-up-environment?source=recommendations&tabs=dockerce#install-the-container-runtime
-3. And of-course you gotta restart the respective service for changes to take effect
 
 ### How to build the container image
 
 ```
 cd 'C:\Users\<USERNAME>\Desktop`
-git clone https://github.com/krishvoor/uperf-windows/ -b master
+git clone https://github.com/krishvoor/uperf-windows/
+cd uperf-windows
+git submodule --init --recursive update
 cd .\uperf-windows
 docker build -t windows:uperf .
 ```
