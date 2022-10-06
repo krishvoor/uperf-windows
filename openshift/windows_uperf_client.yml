@@ -42,7 +42,7 @@ spec:
         command:
         - powershell.exe
         - -command
-        - c:\uperf\uperf.exe -v -a -R -i 1 -m c:\uperf\uperf\uperf.xml -P 30000
+        - python c:\uperf\uperf.py
       volumes:
       - name: config-volume
         configMap:
