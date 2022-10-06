@@ -1,10 +1,8 @@
 # Uperf on Windows
 This repository is intended for running uperf on Windows.
-The base container image used is `mcr.microsoft.com/windows/servercore:ltsc2019`
+The base container image used is `docker.io/winamd64/python:3-windowsservercore-ltsc2022`
 
-To understand more about the base images:-
-https://learn.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/container-base-images#choosing-a-base-image
-
+To understand more about the base images for Windows go [here](https://learn.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/container-base-images#choosing-a-base-image)
 ### How to install & configure Docker with a corresponding runtime
 
 To run Windows container, we can choose from:
@@ -21,12 +19,12 @@ git clone https://github.com/krishvoor/uperf-windows/
 cd uperf-windows
 git submodule --init --recursive update
 cd .\uperf-windows
-docker build -t windows:uperf .
+docker build -t windows:uperf-simply .
 ```
 
 ### Run uperf in server mode
 ```
-PS C:\Users\vkommadi\Desktop> docker run -d -p 30000:30000 quay.io/krvoora_ocm/windows:uperf uperf -s -v -P 30000
+PS C:\Users\vkommadi\Desktop> docker run -d -p 30000:30000 quay.io/krvoora_ocm/windows:uperf-simply uperf -s -v -P 30000
 023963ce1cd81c0629c18d5590b4da51275e325f76e644ad56d087713c0a77e9
 PS C:\Users\vkommadi\Desktop>
 ```
@@ -35,7 +33,7 @@ Validate whether the container started or not
 ```
 PS C:\Users\vkommadi\Desktop> docker ps -a
 CONTAINER ID   IMAGE                               COMMAND                  CREATED         STATUS         PORTS                      NAMES
-023963ce1cd8   quay.io/krvoora_ocm/windows:uperf   "uperf -s -v -P 30000"   6 minutes ago   Up 6 minutes   0.0.0.0:30000->30000/tcp   nifty_satoshi
+023963ce1cd8   quay.io/krvoora_ocm/windows:uperf-simply   "uperf -s -v -P 30000"   6 minutes ago   Up 6 minutes   0.0.0.0:30000->30000/tcp   nifty_satoshi
 PS C:\Users\vkommadi\Desktop>
 ```
 
@@ -62,35 +60,21 @@ EOF
 
 Run the uperf in slave mode
 ```
-PS C:\Users\vkommadi\Desktop>docker run -v "c:\Users\vkommadi\Desktop\uperf":"c:\uperf" quay.io/krvoora_ocm/windows:uperf uperf -v -a -R -i 1 -m test.xml -P 30000
+PS C:\Users\vkommadi\Desktop>docker run -v "c:\Users\vkommadi\Desktop\uperf":"c:\uperf" quay.io/krvoora_ocm/windows:uperf-simply python c:\uperf\uperf.exe
 ```
-This should run for a while, and spew some information on screen, here's the output
+This should run for a while, and spew information on screen, here's the output
 
 ```
-Txn                Count         avg         cpu         max         min
--------------------------------------------------------------------------------
-Txn0                   1    616.80us      0.00ns    616.80us    616.80us
-Txn1              885914     67.25us      0.00ns    122.20ms      3.80us
-Txn2                   1     81.30us      0.00ns     81.30us     81.30us
 
+$ docker logs -f fc96d55055dd
 
-Flowop             Count         avg         cpu         max         min
--------------------------------------------------------------------------------
-connect                1    616.00us      0.00ns    616.00us    616.00us
-write           14174608      4.19us      0.00ns    122.20ms     14.10us
-disconnect             1     80.60us      0.00ns     80.60us     80.60us
-
-
-Run Statistics
-Hostname            Time       Data   Throughput   Operations      Errors
--------------------------------------------------------------------------------
-[172.29.16.62] Success172.29.16.62      62.05s   862.33MB   116.57Mb/s     14128483        0.00
-master            62.05s   865.15MB   116.96Mb/s     14174611        0.00
--------------------------------------------------------------------------------
-Difference(%)     -0.00%      0.33%        0.33%        0.33%       0.00%
-
-
-
+{
+    "norm_byte_avg": "1.19 GB",
+    "norm_ltcy_avg": 6.830062853840754,
+    "norm_ltcy_p95": 9.448229074093321,
+    "norm_ltcy_p99": 12.689357141501684
+}
+$ pwd
 vkommadi@ovnhybrid MINGW64 ~/Desktop/uperf (master)
 $
 ```
