@@ -4,6 +4,6 @@ RUN powershell choco install mingw --yes --accept-license
 # RUN powershell choco install python pip --yes --accept-license
 WORKDIR /uperf
 ADD simply-uperf ./
-RUN pip install -r simply-uperf/requirements.txt
+RUN powershell pip install -r numpy==1.23.0
 COPY cygwin1.dll ./
 COPY uperf.exe ./
