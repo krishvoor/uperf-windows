@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
       - name: uperf-client
-        image: quay.io/krvoora_ocm/windows:uperf
+        image: quay.io/krvoora_ocm/windows:uperf-simply
         imagePullPolicy: Always
         volumeMounts:
         - name: config-volume

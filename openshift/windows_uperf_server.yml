@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: uperf-server 
-        image: quay.io/krvoora_ocm/windows:uperf
+        image: quay.io/krvoora_ocm/windows:uperf-simply
         command:
         - powershell.exe
         - -command
